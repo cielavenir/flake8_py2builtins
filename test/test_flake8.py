@@ -19,7 +19,7 @@ except StandardError as e:
 ''')
     violations = list(Py2BuiltinsChecker(tree).run())
     assert len(violations) == 1
-    assert violations[0][2].startswith()
+    assert violations[0][2].startswith(FLAKE8_PREFIX)
 
 def test_apply():
     tree = parse('''
