@@ -1,7 +1,7 @@
-CHECK_BUILTINS = set(['StandardError', 'apply', 'basestring', 'buffer', 'cmp', 'coerce', 'execfile', 'file', 'intern', 'long', 'raw_input', 'reduce', 'reload', 'unichr', 'unicode', 'xrange'])
+CHECK_BUILTINS = ['StandardError', 'apply', 'basestring', 'buffer', 'cmp', 'coerce', 'execfile', 'file', 'intern', 'long', 'raw_input', 'reduce', 'reload', 'unichr', 'unicode', 'xrange']
 
 from .version import __version__
-from ast import walk, Name
+from ast import walk, ImportFrom, FunctionDef, Assign, Name
 
 class Py2BuiltinsChecker(object):
     name = 'flake8_py2builtins'
@@ -11,11 +11,28 @@ class Py2BuiltinsChecker(object):
         self.tree = tree
 
     def run(self):
+        checkBuiltins = set(CHECK_BUILTINS)  # copy
         for node in walk(self.tree):
+            if isinstance(node, ImportFrom):
+                for name in node.names:
+                    asname = name.asname or name.name
+                    if asname in checkBuiltins:
+                        checkBuiltins.remove(asname)
+                continue
+            if isinstance(node, FunctionDef):
+                if node.name in checkBuiltins:
+                    checkBuiltins.remove(node.name)
+                continue
+            if isinstance(node, Assign):
+                for target in node.targets:
+                    if target.id in checkBuiltins:
+                        checkBuiltins.remove(target.id)
+                continue
+            # There should not be cases to annotated-assign for such names.
             if not isinstance(node, Name):
                 continue
-            if node.id in CHECK_BUILTINS:
-                print('IIB010 %s is Python2-only builtin' % (node.id,))
+            if node.id in checkBuiltins:
+                # print('IIB010 %s is Python2-only builtin' % (node.id,))
                 yield node.lineno, node.col_offset, 'IIB010 %s is Python2-only builtin' % (node.id,), type(self)
 
 '''
