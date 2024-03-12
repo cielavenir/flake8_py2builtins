@@ -1,14 +1,14 @@
 # Simple checker runner
 # Note that this does not handle noqa.
 
+from .checker import Py2BuiltinsChecker as Checker
+
 from ast import parse
 from sys import argv
 from os import walk
 from os.path import join
 from os.path import isdir
 from os.path import isfile
-
-from .checker import Py2BuiltinsChecker
 
 def runfile(fileName):
     with open(fileName) as f:
@@ -18,7 +18,7 @@ def runfile(fileName):
             # SyntaxError is out of this __main__.py scope, but we should show it anyway
             print('%s:%d:%d: E999 %s: %s' % (fileName, e.lineno, e.offset, type(e).__name__, e.msg))
         else:
-            for row, col, err, typ in Py2BuiltinsChecker(tree).run():
+            for row, col, err, typ in Checker(tree).run():
                 print('%s:%d:%d: %s' % (fileName, row, col, err))
 
 if __name__ == '__main__':
