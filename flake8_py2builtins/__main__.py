@@ -1,3 +1,6 @@
+# Simple checker runner
+# Note that this does not handle noqa.
+
 from ast import parse
 from sys import argv
 from os import walk
