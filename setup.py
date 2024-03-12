@@ -17,7 +17,7 @@ setup(
     author_email='cielartisan@gmail.com',
     packages=['flake8_py2builtins'],
     keywords='flake8',
-    entry_points={'flake8.extension': ['IIB0 = flake8_py2builtins.checker:Py2BuiltinsChecker']},
+    entry_points={'flake8.extension': ['F821 = flake8_py2builtins.checker:Py2BuiltinsChecker']},
     zip_safe=False,
     # include_package_data=True,
     platforms='any',

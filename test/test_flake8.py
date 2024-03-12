@@ -1,9 +1,7 @@
 from sys import version_info
 from pytest import mark
 from ast import parse
-from flake8_py2builtins.checker import Py2BuiltinsChecker
-
-FLAKE8_PREFIX = 'IIB010 '
+from flake8_py2builtins.checker import Py2BuiltinsChecker, FLAKE8_PREFIX
 
 def test_positive():
     tree = parse('''

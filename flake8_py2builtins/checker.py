@@ -1,5 +1,10 @@
 CHECK_BUILTINS = ['StandardError', 'apply', 'basestring', 'buffer', 'cmp', 'coerce', 'execfile', 'file', 'intern', 'long', 'raw_input', 'reduce', 'reload', 'unichr', 'unicode', 'xrange']
 
+# flake8_py2builtins is meant to convert some existing builtins to NameError on Py2. Hence F821 should be used so that noqa will work in exactly the same way.
+
+# FLAKE8_PREFIX = 'IIB010 '
+FLAKE8_PREFIX = 'F821 '
+
 from .version import __version__
 from ast import walk, ImportFrom, FunctionDef, Assign, Name
 
@@ -33,7 +38,7 @@ class Py2BuiltinsChecker(object):
                 continue
             if node.id in checkBuiltins:
                 # print('IIB010 %s is Python2-only builtin' % (node.id,))
-                yield node.lineno, node.col_offset, 'IIB010 %s is Python2-only builtin' % (node.id,), type(self)
+                yield node.lineno, node.col_offset, FLAKE8_PREFIX + '%s is Python2-only builtin' % (node.id,), type(self)
 
 '''
 # import __builtin__; sorted(__builtin__.__dict__.keys())
