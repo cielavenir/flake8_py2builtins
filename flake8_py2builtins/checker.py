@@ -25,7 +25,7 @@ class Py2BuiltinsChecker(object):
                 continue
             if isinstance(node, Assign):
                 for target in node.targets:
-                    if target.id in checkBuiltins:
+                    if isinstance(target, Name) and target.id in checkBuiltins:
                         checkBuiltins.remove(target.id)
                 continue
             # There should not be cases to annotated-assign for such names.
