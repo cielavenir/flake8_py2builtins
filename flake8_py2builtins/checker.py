@@ -37,7 +37,7 @@ class Py2BuiltinsChecker(object):
             if not isinstance(node, Name):
                 continue
             if node.id in checkBuiltins:
-                # print('IIB010 %s is Python2-only builtin' % (node.id,))
+                # print(FLAKE8_PREFIX + '%s is Python2-only builtin' % (node.id,))
                 yield node.lineno, node.col_offset, FLAKE8_PREFIX + '%s is Python2-only builtin' % (node.id,), type(self)
 
 '''
